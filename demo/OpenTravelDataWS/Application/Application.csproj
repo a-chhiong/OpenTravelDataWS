@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Folder Include="Behaviours\" />
+      <Folder Include="Contracts\" />
+      <Folder Include="Exceptions\" />
+      <Folder Include="Handlers\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="CsvHelper" Version="33.1.0" />
+      <PackageReference Include="morelinq" Version="4.4.0" />
+      <PackageReference Include="NLog" Version="6.0.6" />
+      <PackageReference Include="NLog.Web.AspNetCore" Version="6.1.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\CrossCutting\CrossCutting.csproj" />
+      <ProjectReference Include="..\Domain\Domain.csproj" />
+    </ItemGroup>
+
+</Project>
