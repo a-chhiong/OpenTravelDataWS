@@ -29,7 +29,7 @@ public static class SwaggerFactory
             : "T.C. Lee API";
         options.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
         {
-            Title = "T.C. Lee",
+            Title = "OpenTravelData Web Service",
             Version = versionInfo.SafeFirst(7),
             Description = descriptionText,
             Contact = new OpenApiContact
