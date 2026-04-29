@@ -1,6 +1,7 @@
 using Application.Models.OpenTravelData.Airport;
 using Application.Services;
 using CrossCutting.JSON;
+using Mapster;
 using Microsoft.AspNetCore.Mvc;
 using WebAPI.ViewModels.Airport.Request;
 using WebAPI.ViewModels.Airport.Response;
@@ -13,16 +14,13 @@ namespace WebAPI.Controllers;
 public class AirportController : BaseController
 {
     private readonly ILogger<AirportController> _logger;
-    private readonly IJsonMapper _mapper;
     private readonly IOpenTravelDataService _service;
 
     public AirportController(
         ILogger<AirportController> logger,
-        IJsonMapper mapper,
         IOpenTravelDataService service)
     {
         _logger = logger;
-        _mapper = mapper;
         _service = service;
     }
     
@@ -42,11 +40,11 @@ public class AirportController : BaseController
     public async Task<AirportDataResponse> GetAirport(
         [FromQuery] AirportDataRequest request)
     {
-        var inputModel = _mapper.Map<AirportDataRequest, AirportQuery>(request);
+        var inputModel = request.Adapt<AirportQuery>();
 
         var outputModel = await _service.Handle(inputModel);
-
-        var response = _mapper.Map<AirportRecord, AirportDataResponse>(outputModel);
+        
+        var response = outputModel.Adapt<AirportDataResponse>();
         
         return response;
     }

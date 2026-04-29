@@ -26,27 +26,36 @@ catch (Exception ex)
 builder.Configuration["VersionInfo"] = versionInfo;
 
 // CorsPolicy
-var corsOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins")
-    .Get<string[]>()?.Select(o => o.Trim().TrimEnd('/')).ToArray() ?? [];   // Clean the origins (remove trailing slashes and whitespace)
+var corsOrigins = builder.Configuration
+    .GetSection("Cors:AllowedOrigins")
+    .Get<string[]>() ?? [];
+var allowLocalhost = builder.Configuration.GetValue<bool>("Cors:AllowLocalhost");
+Console.WriteLine($"Cors:AllowedOrigins: {string.Join(",", corsOrigins)}, AllowLocalhost: {allowLocalhost}");
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("CorsPolicy", policy =>
     {
-        if (corsOrigins.Any())
+        if (corsOrigins.Contains("*")) // 'Wildcard' mode
         {
-            if (corsOrigins.First() == "*") // 'Wildcard' mode
+            policy.AllowAnyOrigin()
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        }
+        else
+        {
+            policy.WithOrigins(corsOrigins)
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowCredentials()
+                .SetPreflightMaxAge(TimeSpan.FromMinutes(10));
+
+            if (allowLocalhost)
             {
-                policy.AllowAnyOrigin()
-                    .AllowAnyHeader()
-                    .AllowAnyMethod();
-            }
-            else
-            {
-                policy.WithOrigins(corsOrigins)
-                    .AllowAnyHeader()
-                    .AllowAnyMethod()
-                    .AllowCredentials()
-                    .SetPreflightMaxAge(TimeSpan.FromMinutes(10));
+                policy.SetIsOriginAllowed(origin =>
+                {
+                    var host = new Uri(origin).Host;
+                    return host is "localhost" or "127.0.0.1";
+                });
             }
         }
     });

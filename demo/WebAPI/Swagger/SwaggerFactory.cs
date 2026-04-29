@@ -23,7 +23,7 @@ public static class SwaggerFactory
     /// <param name="versionInfo"></param>
     public static void Config(SwaggerGenOptions options, string versionInfo)
     {
-        var descriptionFilePath = Path.Combine(AppContext.BaseDirectory, "Swagger/docs", "Description.md");
+        var descriptionFilePath = Path.Combine(AppContext.BaseDirectory, "swagger.md");
         var descriptionText = File.Exists(descriptionFilePath) 
             ? File.ReadAllText(descriptionFilePath) 
             : "T.C. Lee API";

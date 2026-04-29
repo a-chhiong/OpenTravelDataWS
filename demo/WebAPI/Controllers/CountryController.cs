@@ -1,6 +1,7 @@
 using Application.Models.OpenTravelData.Country;
 using Application.Services;
 using CrossCutting.JSON;
+using Mapster;
 using Microsoft.AspNetCore.Mvc;
 using WebAPI.ViewModels.Airport.Request;
 using WebAPI.ViewModels.Airport.Response;
@@ -13,16 +14,13 @@ namespace WebAPI.Controllers;
 public class CountryController : BaseController
 {
     private readonly ILogger<CountryController> _logger;
-    private readonly IJsonMapper _mapper;
     private readonly IOpenTravelDataService _service;
 
     public CountryController(
         ILogger<CountryController> logger,
-        IJsonMapper mapper,
         IOpenTravelDataService service)
     {
         _logger = logger;
-        _mapper = mapper;
         _service = service;
     }
     
@@ -42,11 +40,11 @@ public class CountryController : BaseController
     public async Task<CountryDataResponse> GetCountry(
         [FromQuery] CountryDataRequest request)
     {
-        var inputModel = _mapper.Map<CountryDataRequest, CountryQuery>(request);
+        var inputModel = request.Adapt<CountryQuery>();
 
         var outputModel = await _service.Handle(inputModel);
-
-        var response = _mapper.Map<CountryRecord, CountryDataResponse>(outputModel);
+        
+        var response = outputModel.Adapt<CountryDataResponse>();
         
         return response;
     }

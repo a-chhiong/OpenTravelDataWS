@@ -10,9 +10,9 @@ namespace Application.Services;
 
 public interface IOpenTravelDataService
 {
-    Task<AirportRecord?> Handle(AirportQuery input);
-    Task<CountryRecord?> Handle(CountryQuery input);
-    Task<AirlineRecord?> Handle(AirlineQuery input);
+    Task<AirportRecord> Handle(AirportQuery input);
+    Task<CountryRecord> Handle(CountryQuery input);
+    Task<AirlineRecord> Handle(AirlineQuery input);
 }
 
 public class OpenTravelDataService: IOpenTravelDataService
@@ -40,7 +40,7 @@ public class OpenTravelDataService: IOpenTravelDataService
         this._airlineValidator = airlineValidator;
     }
 
-    public async Task<AirportRecord?> Handle(AirportQuery input)
+    public async Task<AirportRecord> Handle(AirportQuery input)
     {
         var result = _airportValidator.Validate(input);
         
@@ -50,10 +50,10 @@ public class OpenTravelDataService: IOpenTravelDataService
         
         Guarder.Throw(record == null, ActionCodeEnum.NoDataFound);
 
-        return record;
+        return record ?? new AirportRecord();
     }
 
-    public async Task<CountryRecord?> Handle(CountryQuery input)
+    public async Task<CountryRecord> Handle(CountryQuery input)
     {
         var result = _countryValidator.Validate(input);
         
@@ -63,10 +63,10 @@ public class OpenTravelDataService: IOpenTravelDataService
         
         Guarder.Throw(record == null, ActionCodeEnum.NoDataFound);
 
-        return record;
+        return record ?? new CountryRecord();
     }
 
-    public async Task<AirlineRecord?> Handle(AirlineQuery input)
+    public async Task<AirlineRecord> Handle(AirlineQuery input)
     {
         var result = _airlineValidator.Validate(input);
         
@@ -76,6 +76,6 @@ public class OpenTravelDataService: IOpenTravelDataService
         
         Guarder.Throw(record == null, ActionCodeEnum.NoDataFound);
 
-        return record;
+        return record ?? new AirlineRecord();
     }
 }
