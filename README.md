@@ -1,4 +1,4 @@
-# OpenTravelDataWS
+# OTDWebAPI
 A WebAPI with handy query feature based on OpenTravelData
 
 - [optd_airlines](https://github.com/opentraveldata/opentraveldata/blob/master/opentraveldata/optd_airlines.csv)
